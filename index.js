@@ -34,7 +34,48 @@ var handlebars = require('express3-handlebars').create({defaultLayout:'main'});
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: true })); 
+
 //define route
+app.get('/signin', function(req,res){
+	res.render('signin');
+});
+
+app.get('/signup', function(req,res){
+	res.render('signup');
+});
+
+app.get('/profile', function(req,res){
+	res.render('profile');
+});
+
+app.get('/myqueue', function(req,res){
+	res.render('myqueue');
+});
+
+app.get('/myreport', function(req,res){
+	res.render('myreport');
+});
+
+app.get('/openissue', function(req,res){
+	res.render('openissue');
+});
+
+app.get('/closeissue', function(req,res){
+	res.render('closeissue');
+});
+
+// 404 catch-all handler (middleware)
+app.use(function(req, res, next){
+	res.status(404);
+	res.render('404');
+});
+
+// 500 error handler (middleware)
+app.use(function(err, req, res, next){
+	console.error(err.stack);
+	res.status(500);
+	res.render('505');
+});
 
 
 app.listen(app.get('port'),function() {

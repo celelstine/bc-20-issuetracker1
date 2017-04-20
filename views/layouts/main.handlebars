@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+	<meta name="keywords" content="issue track" /> <!-- Keywords used for search engine indexing! -->
+  <meta name="description" content="Room checker"/> <!--Website Description -->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="author" content="okorocelestine@gmail.com" />
+  <title> IST (issue tracking system)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	{{{_sections.head}}}
+	 
+	{{#if showTests}}
+		<link rel="stylesheet" href="/vendor/mocha.css">
+	{{/if}}
+<script src="//code.jquery.com/jquery-2.0.2.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/css/styles.css">
+		<!-- firebase reference -->
+		<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-database.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-messaging.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/3.6.2/firebase-storage.js"></script>
+		<script>
+		var config = {
+		  apiKey: "AIzaSyABfpbd-dGQ97txyD37v98jZAkr0Dj8Qic",
+		  authDomain: "issuetracker-cf5ed.firebaseapp.com",
+		  databaseURL: "https://issuetracker-cf5ed.firebaseio.com",
+		  projectId: "issuetracker-cf5ed",
+		  storageBucket: "issuetracker-cf5ed.appspot.com",
+		  messagingSenderId: "363562248700"
+		};
+  	var firedbase =firebase.initializeApp(config);
+		</script>
+		<script src="/js/main.js"></script>
+		<script src="/js/utility.js"></script>
+</head>
+<body>
+	<div class="andela">
+    <a href="https://andela-bootcamp.slack.com/" >Andela  <br /> Bootcamp</a>
+  </div>
+     
+  <div class= "heading">
+  	     Issue Tracker
+      <img src="img/och.jpg" />
+      <hr />
+   </div>
+     <div class="menubar">
+      <button type="button" style="border-radius:3px" id="raiseissue" style="background-color:#0000F2">Raise an Issue </button>
+      <button type="button" style="border-radius:3px" id="todolist">Todo list </button>
+      <button type="button" style="border-radius:3px" id="issuelog">Issue log </button>
+      <button type="button" style="border-radius:3px" id="openissue">Open Issue </button>
+      <button type="button" style="border-radius:3px" id="closeissue">Close Issue </button>
+      <button type="button" style="border-radius:3px" onClick="checkout()" id="btnCheckout">Sign Out </button>
+     </div>
+       
+     
+    <br />
+    <br />
+    <br />
+    <div class="content" id="content">
+	{{{body}}}
+
+	
+
+</div>
+</body>
+</html>	

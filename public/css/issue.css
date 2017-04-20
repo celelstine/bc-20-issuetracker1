@@ -1,0 +1,72 @@
+/* style for share begin  */
+
+
+
+.issue {
+background-color:#EEEEEE;
+width:97%;
+overflow:hidden;
+height:auto;
+padding:2px;
+margin-bottom: 4px;
+}
+.issueheader{
+	width:100%;
+	margin-top: -9px
+}
+.issuefooter{
+	width:100%;
+	margin-top: -9px;
+	bottom: 0px;
+}
+
+.raisedBy{
+width:15%;
+float:left;
+font-size:12px;
+font-style:italic;
+overflow: hidden;
+color: #091BC1
+
+}
+
+.raisedDate{
+	width:20%;
+	float:right;
+	font-size:12px;
+	color:#091BC1
+}
+
+.subject{
+	width:60%;
+	float:left;
+	font-size:12px;
+	overflow: hidden;
+	color :#091BC1;
+
+
+}
+
+.description{
+	width:98%;
+	height:40%;
+	float:left;
+	margin-left:0px;
+	font-size:12px;
+	overflow: hidden;
+	margin-top: -8px;
+	color: #000053;
+	text-align: center;
+
+}
+
+.fixed{
+	height:15px;
+	color:red;
+	font-size: 10px;
+	margin-left: 10px;
+	padding: 5px
+}
+
+
+
