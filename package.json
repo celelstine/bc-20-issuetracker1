@@ -1,0 +1,31 @@
+{
+  "name": "issuetracker",
+  "version": "1.0.0",
+  "description": "An application to report, fix and tracker isssue",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/celelstine/bc-20-issuetracker.git"
+  },
+  "keywords": [
+    "issue",
+    "tracker"
+  ],
+  "author": "okorocelestine@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/celelstine/bc-20-issuetracker/issues"
+  },
+  "homepage": "https://github.com/celelstine/bc-20-issuetracker#readme",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "firebase": "^3.8.0",
+    "path": "^0.12.7"
+  }
+}
