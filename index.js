@@ -1,7 +1,7 @@
-const path = require('path');
+
 const express = require('express');
-const bodyParser = require('body-parser');
 const  app = express();
+const bodyParser = require('body-parser');
 const firebase1 = require("firebase");
 
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -20,9 +20,6 @@ var config = {
 };
 firebase1.initializeApp(config);
 
-//route setup
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, '')));
 var cookieParser = require('cookie-parser');
 // must use cookieParser before expressSession
 app.use(cookieParser());
@@ -34,14 +31,32 @@ var handlebars = require('express3-handlebars').create({defaultLayout:'main'});
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(express.static(__dirname + '/public'));
+
+
 
 //define route
+app.post('/setsession', function(req,res){
+		req.session.uid= req.body.uid;
+		req.session.save();
+		//console.log(req.session.uid);
+});
 app.get('/signin', function(req,res){
 	res.render('signin');
 });
 
 app.get('/signup', function(req,res){
 	res.render('signup');
+});
+//check for user session
+app.use(function(req,res,next){
+	if(req.session.uid)  return next();
+	console.log("test");
+	res.redirect('/signin');
+});
+
+app.get('/reportissue', function(req,res){
+	res.render('reportissue');
 });
 
 app.get('/profile', function(req,res){
