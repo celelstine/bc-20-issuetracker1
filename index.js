@@ -22,10 +22,21 @@ firebase1.initializeApp(config);
 
 //route setup
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'routes')));
 app.use(express.static(path.join(__dirname, '')));
 var cookieParser = require('cookie-parser');
 // must use cookieParser before expressSession
 app.use(cookieParser());
 
 app.use(expressSession({secret:'smilesh2o24Andela'}));
+// set up handlebars view engine
+var handlebars = require('express3-handlebars').create({defaultLayout:'main'});
+
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
+app.use(bodyParser.urlencoded({ extended: true })); 
+//define route
+
+
+app.listen(app.get('port'),function() {
+    console.log('Document Tracker running at  http://localhost:' + app.get('port'));
+});
