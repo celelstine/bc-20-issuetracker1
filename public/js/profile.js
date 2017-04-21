@@ -17,7 +17,8 @@ $(document).ready(function(){
       if( snapshot.val() != null ) {
         console.log(snapshot.val());
         snapshot.ref.update({"name": name,"phone" :phone,"email" : email,"departments": department});
-        $('#result').text ="Your Profile has been updated";
+       // $('#result').text ="Your Profile has been updated";
+        showresult("Your Profile has been updated");
       }
     });
   });

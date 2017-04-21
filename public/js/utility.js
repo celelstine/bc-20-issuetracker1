@@ -1,4 +1,9 @@
  
+ $(document).ready(function(){  
+    window.onload = function() {
+        showusername();
+    };
+});
 function gettimestamp() {
     // for IE
     if (!Date.now) {
@@ -42,4 +47,26 @@ function scorePassword(pass) {
     
     return parseInt(score);
     
+}
+
+var getdept = function(uid,cb) {
+    let Userref = firebase.database().ref('ist/user'),
+            department;
+  Userref.orderByChild('uid').equalTo(uid).on("value", function(snapshot) {
+     snapshot.forEach(function(data) {
+        department = data.val().departments;
+      console.log(department);
+       cb(department);
+    });
+  });
+}
+
+var showresult =function(text) {
+    $("#regTitle").html("<strong>Info!</strong> " + text + ".");
+    
+}
+
+var showusername = function() {
+    let username = $("#usernamet").val();
+    $("#usernamet").html(username);
 }

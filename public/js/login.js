@@ -26,7 +26,8 @@ $(document).ready(function(){
               window.location.href = '/issuelog';
             }
           });
-          //set session 
+          //set session /notify
+          
           $.post("/setsession",{uid: curuser.uid},function(data, status){ console.log(status); });
         } else {
           // create new user
@@ -45,7 +46,8 @@ $(document).ready(function(){
             // direct user to profile
             window.location.href = '/profile'
           }). catch(function(error) {
-            $("#result").text = "Error occures, please try again";
+            showresult("Error occures, please try again");
+            //$("#result").text = "Error occures, please try again";
             //console.error('Sign Out Error', error);
             
           });
@@ -55,8 +57,9 @@ $(document).ready(function(){
       var errorCode = error.code;
       var errorMessage = error.message;
      // res.redirect('/signup');
-      console.log(error.code)
-       console.log(error.message)
+     // console.log(error.code)
+       //console.log(error.message)
+      showresult("Error occures, please try again");
     }); 
   });
   
@@ -84,7 +87,8 @@ $(document).ready(function(){
         //set session 
         $.post("/setsession",{uid: curuser.uid},function(data, status){ console.log(status); });
       } else {
-            $("#result").text = "Wrong email or password";
+        showresult("Wrong email or password");
+           // $("#result").text = "Wrong email or password";
       }
     })
     .catch(function(error) {
@@ -92,7 +96,8 @@ $(document).ready(function(){
       errorCode = error.code;
       errorMessage = error.message;
       console.log('errorCode = ' + errorCode + ', errorMessage= ' + errorMessage);
-      $("#result").text = "Wrong email or password";
+      showresult("Wrong email or password");
+      //$("#result").text = "Wrong email or password";
     });
   });
 

@@ -1,20 +1,25 @@
 $(document).ready(function(){ 
  	let uid= $('#uid').val(),
  			Issueref = firebase.database().ref('ist/issue'),
- 			curissue ;
+ 			curissue,
+ 			issuecount=0 ;
  	Issueref.orderByChild('raisedby').equalTo(uid).on("value", function(snapshot) {
     snapshot.forEach(function(data) {
      	curissue = data.val();
-     	console.log(curissue);
+     	//console.log(curissue);
      displayIssue(data.key,curissue.priority,curissue.raisedby,curissue.subject,curissue.dateraised,curissue.description,
     							curissue.department,curissue.status,curissue.lastupdate);
-     	let test = curissue.raisedby + '-' +curissue.subject+ '-' +curissue.dateraise+ '-' +curissue.description
-     							+ '-' +curissue.department+ '-' +curissue.status+ '-' +curissue.lastupdate;
-     	console.log(data.val());
+     //	let test = curissue.raisedby + '-' +curissue.subject+ '-' +curissue.dateraise+ '-' +curissue.description
+     	//						+ '-' +curissue.department+ '-' +curissue.status+ '-' +curissue.lastupdate;
+     	//console.log(data.val());
+     	issuecount += 1;
      });
   });
 
  });
+ if (issuecount === 0) {
+ 	showresult("There is ticket on your log");
+ }
 
 var displayIssue = function(key,priority,raisedBy,subject,dateraise,description,department,status,lastupdatedDate) {
 		getUsername(raisedBy,function(username) {

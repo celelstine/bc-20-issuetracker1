@@ -27,6 +27,8 @@
     "express-session": "^1.15.2",
     "express3-handlebars": "^0.5.2",
     "firebase": "^3.8.0",
+    "nexmo": "^2.0.2",
+    "nodemailer": "^4.0.1",
     "path": "^0.12.7"
   }
 }

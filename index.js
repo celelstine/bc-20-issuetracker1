@@ -33,8 +33,11 @@ app.set('view engine', 'handlebars');
 app.use(bodyParser.urlencoded({ extended: true })); 
 app.use(express.static(__dirname + '/public'));
 
-
-
+function adminOnly(req, res, next){
+	if(req.session.uid && req.session.department) return next();
+		//
+		next('route');
+}
 //define route
 app.post('/setsession', function(req,res){
 		req.session.uid= req.body.uid;
@@ -47,12 +50,12 @@ app.post('/setsession', function(req,res){
         } 
 
         req.session.uname =data.val().name;
-        console.log(data.val().name);
+        //console.log(data.val().name);
+        req.session.save();
       });
     });
 
-		////////////////////
-		req.session.save();
+		//////////////////
 		console.log('un=' + req.session.uname);
 		//console.log(req.session.uid);
 });
@@ -71,7 +74,12 @@ app.use(function(req,res,next){
 });
 
 app.get('/reportissue', function(req,res){
-	res.render('reportissue',{'uid' : req.session.uid,'uname' :req.session.uname});
+	if(req.session.department) {
+		res.render('reportissue',{ layout: 'admin' },{'uid' : req.session.uid,'uname' :req.session.uname});
+	} else {
+		res.render('reportissue',{'uid' : req.session.uid,'uname' :req.session.uname});
+	}
+	
 });
 
 app.get('/profile', function(req,res){
@@ -87,7 +95,12 @@ app.get('/profile', function(req,res){
         name =data.val().name,
 				department =(data.val().departments) ? data.val().departments : '' ,
 				phone =(data.val().phone) ? data.val().phone : '' ;
-				res.render('profile',{'uid' : req.session.uid,'name' :name,'department': department,'email' :email,'phone':phone});
+				if(req.session.department) {
+					res.render('profile',{ layout: 'admin' },{'uid' : req.session.uid,'name' :name,'department': department,'email' :email,'phone':phone});
+				} else {
+					res.render('profile',{'uid' : req.session.uid,'name' :name,'department': department,'email' :email,'phone':phone});
+				}
+				
       });
   });
   //console.log(email + '-' +	name + '-' +department + '-' +phone);
@@ -95,19 +108,95 @@ app.get('/profile', function(req,res){
 });
 
 app.get('/myqueue', function(req,res){
-	res.render('myqueue',{'uid' : req.session.uid,'uname' :req.session.uname});
+	if(req.session.department) {
+		res.render('myqueue',{ layout: 'admin' },{'uid' : req.session.uid,'uname' :req.session.uname});
+	} else {
+		res.render('myqueue',{'uid' : req.session.uid,'uname' :req.session.uname});
+	}
 });
 
 app.get('/myreport', function(req,res){
-	res.render('myreport',{'uid' : req.session.uid,'uname' :req.session.uname});
+	if(req.session.department) {
+		res.render('myreport',{ layout: 'admin' },{'uid' : req.session.uid,'uname' :req.session.uname});
+	} else {
+		res.render('myreport',{'uid' : req.session.uid,'uname' :req.session.uname});
+	}
 });
 
-app.get('/openissue', function(req,res){
-	res.render('openissue',{'uid' : req.session.uid,'uname' :req.session.uname,'department':req.session.department});
+app.get('/openissue',adminOnly, function(req,res){
+	res.render('openissue',{ layout: 'admin' },{'uid' : req.session.uid,'uname' :req.session.uname,'department':req.session.department});
 });
 
-app.get('/closeissue', function(req,res){
-	res.render('closeissue',{'uid' : req.session.uid,'uname' :req.session.uname,'department':req.session.department});
+app.get('/closeissue',adminOnly, function(req,res){
+	res.render('closeissue',{ layout: 'admin' },{'uid' : req.session.uid,'uname' :req.session.uname,'department':req.session.department});
+});
+
+
+
+//email handle
+const nodemailer = require('nodemailer');
+var mailTransport = nodemailer.createTransport({
+		service: "Gmail",
+		host: "smtp.gmail.com",
+		auth: {
+			user: "okorocelestine@gmail.com",
+			pass: "smilesh2o"
+		}
+	});
+
+//sms api
+const Nexmo = require('nexmo');
+const nexmo = new Nexmo({
+  apiKey: 'b97aa1b5',
+  apiSecret: 'a0536d3ec5721682'
+});
+app.post('/notify', function(req, res){
+
+	let key =req.body.uid,
+			subject,
+			notifymeans,
+			notifyvalue;
+	let Issueref = firebase.database().ref('ist/issue').child(key);
+  Issueref.once('value', function(snapshot) {
+		if( snapshot.val() != null ) {
+			subject =snapshot.val().subject;
+			notifymeans =snapshot.val().sendernotificationmeans;
+			notifyvalue=snapshot.val().notificationvalue;
+			console.log(snapshot.val());
+
+			if (notifymeans == 'email') {
+				res.render('mail/notifymail',	{ layout: null, subject: subject },
+				function(err,html){
+					if( err ) console.log('error in email template');
+
+						mailTransport.sendMail({
+								from: '"Issue Tracker ": okorocelestine@gmail.com',
+								to: notifyvalue,
+								subject: 'Your issue has been resolved',
+								html: html,
+								generateTextFromHtml: true
+							}, function(err){
+								if(err) console.error('Unable to send confirmation: '+ err.stack);
+						});
+					}
+				);
+			} else if (notifymeans == 'phone') {
+				let text = 'IST notification \n' +
+									'Thanks for using our service to fix your bug./n'+
+									'We have successfully fix you bug on the subject: /n'+
+									subject;
+				nexmo.message.sendSms(config.number, notifyvalue, text, {type: 'unicode'},
+		    	(err, responseData) => {if (responseData) {console.log(responseData)}}
+		  	);
+
+
+			}
+
+	  }
+	});
+
+	
+	//res.render('mail/cart-thank-you',{ layout: null,  name: 'nkem',number:'07032955135'});
 });
 
 // 404 catch-all handler (middleware)

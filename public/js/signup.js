@@ -1,13 +1,3 @@
-function saveUserID(uid) {
-   localStorage.setItem("uid",uid);
-   let Userref = firebase.database().ref('ist/user')
-    Userref.orderByChild('uid').equalTo(uid).on("value", function(snapshot) {
-      console.log(snapshot.val());
-      snapshot.forEach(function(data) {
-        localStorage.setItem("username",data.val().name);
-      });
-    });
-}
 
 $(document).ready(function(){ 
   //password strength
@@ -19,23 +9,13 @@ $(document).ready(function(){
 
     /* stop form from submitting normally */
     event.preventDefault();
-      /** using back end
-      // get the action attribute from the <form action=""> element 
-      var $form = $( this ),
-        url = $form.attr( 'action' );
-      var posting = $.post( url, { name: $('#name').val(), email: $('#email').val(), department: $('#department').val()} );
-
-      //posting.done(function( data ) {
-       // $("#result").text(data);
-
-      //});$('#password').val()
-      **/
   //create user 
+  let  currentUser;
   firebase.auth().createUserWithEmailAndPassword($('#email').val(), $('#password').val())
   .then(function(user){
-    var currentUser = firebase.auth().currentUser;
+   currentUser = firebase.auth().currentUser;
     if(currentUser) {
-       saveUserID(currentUser.uid);
+       $.post("/setsession",{uid: currentUser.uid},function(data, status){ console.log(status); });
     }
 
   })
@@ -50,15 +30,15 @@ $(document).ready(function(){
   var  newuser = {
     "name" : $('#name').val(),
     "departments" : $('#department').val(),
-    "uid" : localStorage.getItem("uid"),
+    "uid" : currentUser.uid,
     "email" : $('#email').val(),
     "phone" :$('#phone').val()
   };
-  //console.log(localStorage.uid);
   userRef.push(newuser).then(function(user) {
-    window.location.href = '/'
+    window.location.href = '/myreport';
   }). catch(function(error) {
-    $("#result").text = "Error occures, please try again";
+    showresult("Error occured, please try again");
+   // $("#result").text = "Error occures, please try again";
     //console.error('Sign Out Error', error);
     
   });

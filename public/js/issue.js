@@ -46,8 +46,8 @@ $(document).ready(function(){
   Issueref.push(newissue).then(function(issue) {
     window.location.href ='/myreport';
   }). catch(function(error) {
-    console.error('Sign Out Error', error);
-    $("#result").text = "Error occures, please try again";
+    //console.error('Sign Out Error', error);
+    showresult("Error occures, please try again");
   });
   });
 });
