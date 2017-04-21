@@ -67,8 +67,6 @@ $(document).ready(function(){
     .then(function(user) {
       let curuser = firebase.auth().currentUser;
       if (curuser) {
-        saveUserID(user1.uid);
-        /////////////////
         let Userref = firebase.database().ref('ist/user');
         Userref.orderByChild("uid").equalTo(curuser.uid).once("value", function(snapshot) {
           var userData = snapshot.val();
@@ -81,15 +79,13 @@ $(document).ready(function(){
                 window.location.href = '/issuelog';
               }
             });
-            //set session 
+          }
+        });
+        //set session 
         $.post("/setsession",{uid: curuser.uid},function(data, status){ console.log(status); });
-
-
-        ////////////
       } else {
-        $("#result").text = "Wrong email or password";
+            $("#result").text = "Wrong email or password";
       }
-       
     })
     .catch(function(error) {
     // Handle Errors here.

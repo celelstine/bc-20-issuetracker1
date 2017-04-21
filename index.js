@@ -2,7 +2,7 @@
 const express = require('express');
 const  app = express();
 const bodyParser = require('body-parser');
-const firebase1 = require("firebase");
+const firebase= require("firebase");
 
 app.use(bodyParser.urlencoded({ extended: true })); 
 
@@ -18,7 +18,7 @@ var config = {
   storageBucket: "issuetracker-cf5ed.appspot.com",
   messagingSenderId: "363562248700"
 };
-firebase1.initializeApp(config);
+firebase.initializeApp(config);
 
 var cookieParser = require('cookie-parser');
 // must use cookieParser before expressSession
@@ -38,7 +38,22 @@ app.use(express.static(__dirname + '/public'));
 //define route
 app.post('/setsession', function(req,res){
 		req.session.uid= req.body.uid;
+		let Userref = firebase.database().ref('ist/user');
+		Userref.orderByChild("uid").equalTo(req.body.uid).once("value", function(snapshot) {
+      snapshot.forEach(function(data) {
+        console.log(data.val());
+        if (data.val().role) {
+          req.session.department =data.val().departments;
+        } 
+
+        req.session.uname =data.val().name;
+        console.log(data.val().name);
+      });
+    });
+
+		////////////////////
 		req.session.save();
+		console.log('un=' + req.session.uname);
 		//console.log(req.session.uid);
 });
 app.get('/signin', function(req,res){
@@ -56,27 +71,43 @@ app.use(function(req,res,next){
 });
 
 app.get('/reportissue', function(req,res){
-	res.render('reportissue');
+	res.render('reportissue',{'uid' : req.session.uid,'uname' :req.session.uname});
 });
 
 app.get('/profile', function(req,res){
-	res.render('profile');
+	let Userref = firebase.database().ref('ist/user'),
+			email,
+			name,
+			department,
+			phone;
+	Userref.orderByChild("uid").equalTo(req.session.uid).once("value", function(snapshot) {
+      snapshot.forEach(function(data) {
+        //console.log(data.val());
+        email =data.val().email;
+        name =data.val().name,
+				department =(data.val().departments) ? data.val().departments : '' ,
+				phone =(data.val().phone) ? data.val().phone : '' ;
+				res.render('profile',{'uid' : req.session.uid,'name' :name,'department': department,'email' :email,'phone':phone});
+      });
+  });
+  //console.log(email + '-' +	name + '-' +department + '-' +phone);
+	//res.render('profile',{'uid' : req.session.uid,'name' :name,'department': department,'email' :email,'phone':phone});
 });
 
 app.get('/myqueue', function(req,res){
-	res.render('myqueue');
+	res.render('myqueue',{'uid' : req.session.uid,'uname' :req.session.uname});
 });
 
 app.get('/myreport', function(req,res){
-	res.render('myreport');
+	res.render('myreport',{'uid' : req.session.uid,'uname' :req.session.uname});
 });
 
 app.get('/openissue', function(req,res){
-	res.render('openissue');
+	res.render('openissue',{'uid' : req.session.uid,'uname' :req.session.uname,'department':req.session.department});
 });
 
 app.get('/closeissue', function(req,res){
-	res.render('closeissue');
+	res.render('closeissue',{'uid' : req.session.uid,'uname' :req.session.uname,'department':req.session.department});
 });
 
 // 404 catch-all handler (middleware)

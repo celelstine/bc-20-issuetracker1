@@ -1,0 +1,53 @@
+<div class="container">
+
+<div class="page-header" style="margin-left:-362px"> 
+    <h3>Profile Panel </h3>
+</div>
+<!-- Registration form - START -->
+<div class="container">
+    <div class="row" style="width:40%;margin-left:20%; margin-top:-10px">
+        <form role="form" id="profile">
+        <input type="hidden" id="uid" value="{{uid}}">
+            <div class="col-lg-6" >
+                <span id="result" ></span>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="InputName" id="name" placeholder="Enter Name" value="{{name}}" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="email" class="form-control" id="InputEmailFirst" name="email" placeholder="Enter Email" value="{{email}}" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="phone" class="form-control" id="InputPhone" name="phone" placeholder="Enter Phone Number" value="{{phone}}" required>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                         <select  name="department" id="department" class="form-control" value="{{department}}" required>
+                          <option value="">Please select your department</option>
+                          <option value="Finance">Finance</option>
+                          <option value="Operations">Operations</option>
+                          <option value="Marketing">Marketing</option>
+                          <option value="Sales">Sales</option>
+                          <option value="Success">Success</option>
+                          <option value="Training">Training</option>
+                        </select>
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span>
+                    </div>
+                </div>
+                <input type="submit" name="submit" id="submit" value="Submit" class="btn btn-info pull-right">
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Registration form - END -->
+
+</div>

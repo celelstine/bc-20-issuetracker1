@@ -4,7 +4,7 @@ $(document).ready(function(){
      let valueSelected  = $("#notifymeans").val(),
          Userref = firebase.database().ref('ist/user'),
          usercontact,
-         uid=localStorage.getItem("uid");
+         uid=$('input#uid').val();
       console.log(valueSelected);
       Userref.orderByChild('uid').equalTo(uid).on("value", function(snapshot) {
         //console.log(snapshot.val());
@@ -26,7 +26,7 @@ $(document).ready(function(){
        newissue = {
         "assigneeID" : "",
         "assigneeName" : "",
-        "raisedby" : localStorage.getItem("uid"),
+        "raisedby" : $('#uid').val(),
         "dateraised" : gettimestamp(),
         "status" : "Initiated",
         "description" :$('#description').val() ,
@@ -44,7 +44,7 @@ $(document).ready(function(){
       };
   console.log(newissue);
   Issueref.push(newissue).then(function(issue) {
-    window.location.href ='/issuelog';
+    window.location.href ='/myreport';
   }). catch(function(error) {
     console.error('Sign Out Error', error);
     $("#result").text = "Error occures, please try again";
